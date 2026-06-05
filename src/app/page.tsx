@@ -300,8 +300,8 @@ export default function Home() {
       id: 2,
       title: "oiya",
       category: "Mobile App",
-      description: "A clean mobile application built with the Flutter framework. Focuses on smooth transitions, user registration, and clean user interfaces.",
-      tech: ["Flutter", "Dart", "Mobile UI", "Material Design"],
+      description: "A messaging and interactive chat mobile application built with the Flutter framework. Features a clean card-based UI, smooth gesture transitions, secure user onboarding, and real-time messaging views.",
+      tech: ["Flutter", "Dart", "Mobile UI", "Material Design", "State Management"],
       demoUrl: "https://github.com/Velubby/oiya",
       githubUrl: "https://github.com/Velubby/oiya",
       imagePath: "/oiya.png"
@@ -319,9 +319,9 @@ export default function Home() {
     {
       id: 4,
       title: "GGWP Weather",
-      category: "Python Tool",
-      description: "An automated weather data pipeline. Extracts raw weather statistics from public APIs, cleans and transforms JSON parameters, and loads them into local CSV reports.",
-      tech: ["Python", "JSON Parsing", "REST API", "ETL Pipeline"],
+      category: "Web App",
+      description: "A weather web application integrated with AI that generates and displays custom, localized fun facts for every city searched along with current meteorological reports.",
+      tech: ["React", "TypeScript", "AI Integration", "Weather API", "Tailwind CSS"],
       demoUrl: "https://github.com/Velubby/etl-weather",
       githubUrl: "https://github.com/Velubby/etl-weather",
       imagePath: "/ggwp.PNG"
