@@ -129,11 +129,21 @@ function TypingText() {
 }
 
 // Custom Cursor Trail Component
+interface Particle {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
+  opacity: number;
+  vx: number;
+  vy: number;
+}
+
+// Custom Cursor Trail Component
 function CustomCursor() {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [trail, setTrail] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
-  const [isHidden, setIsHidden] = useState(true);
+  const [particles, setParticles] = useState<Particle[]>([]);
+  const nextId = useRef(0);
+  const lastMove = useRef(0);
 
   useEffect(() => {
     const isMobile = window.matchMedia("(max-width: 768px)").matches ||
@@ -142,84 +152,70 @@ function CustomCursor() {
 
     if (isMobile) return;
 
-    const showTimeout = setTimeout(() => setIsHidden(false), 0);
-
     const handleMouseMove = (e: MouseEvent) => {
-      setPosition({ x: e.clientX, y: e.clientY });
+      const now = Date.now();
+      if (now - lastMove.current < 20) return; // rate limit to 20ms for buttery smooth performance
+      lastMove.current = now;
+
+      const angle = Math.random() * Math.PI * 2;
+      const speed = Math.random() * 1.2 + 0.3;
+      const newParticle: Particle = {
+        id: nextId.current++,
+        x: e.clientX,
+        y: e.clientY,
+        size: Math.random() * 4 + 4, // size: 4px to 8px
+        opacity: 1,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed
+      };
+
+      setParticles((prev) => [...prev, newParticle].slice(-30));
     };
 
-    const handleMouseLeave = () => setIsHidden(true);
-    const handleMouseEnter = () => setIsHidden(false);
-
     window.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseleave", handleMouseLeave);
-    document.addEventListener("mouseenter", handleMouseEnter);
-
     return () => {
-      clearTimeout(showTimeout);
       window.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseleave", handleMouseLeave);
-      document.removeEventListener("mouseenter", handleMouseEnter);
     };
   }, []);
 
   useEffect(() => {
     let animationFrameId: number;
 
-    const updateTrail = () => {
-      setTrail((prev) => {
-        const dx = position.x - prev.x;
-        const dy = position.y - prev.y;
-        return {
-          x: prev.x + dx * 0.15,
-          y: prev.y + dy * 0.15
-        };
-      });
-      animationFrameId = requestAnimationFrame(updateTrail);
+    const updateParticles = () => {
+      setParticles((prev) =>
+        prev
+          .map((p) => ({
+            ...p,
+            x: p.x + p.vx,
+            y: p.y + p.vy,
+            opacity: p.opacity - 0.025, // fade out speed
+            size: Math.max(0, p.size - 0.08) // shrink speed
+          }))
+          .filter((p) => p.opacity > 0 && p.size > 0)
+      );
+      animationFrameId = requestAnimationFrame(updateParticles);
     };
 
-    animationFrameId = requestAnimationFrame(updateTrail);
+    animationFrameId = requestAnimationFrame(updateParticles);
     return () => cancelAnimationFrame(animationFrameId);
-  }, [position]);
-
-  useEffect(() => {
-    const handleMouseOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      const isInteractive =
-        target.tagName === "A" ||
-        target.tagName === "BUTTON" ||
-        target.closest("button") !== null ||
-        target.closest("a") !== null ||
-        target.closest("[role='button']") !== null;
-
-      setIsHovered(!!isInteractive);
-    };
-
-    window.addEventListener("mouseover", handleMouseOver);
-    return () => window.removeEventListener("mouseover", handleMouseOver);
   }, []);
-
-  if (isHidden) return null;
 
   return (
     <>
-      <div
-        className="fixed top-0 left-0 w-2.5 h-2.5 bg-accent-purple rounded-full pointer-events-none z-50 transform -translate-x-1/2 -translate-y-1/2"
-        style={{
-          left: `${position.x}px`,
-          top: `${position.y}px`
-        }}
-      />
-      <div
-        className={`fixed top-0 left-0 rounded-full pointer-events-none z-50 transform -translate-x-1/2 -translate-y-1/2 border border-accent-purple transition-all duration-150 ${isHovered
-          ? "w-10 h-10 bg-accent-purple/10 border-accent-purple"
-          : "w-6 h-6 border-accent-purple/50"
-          }`}
-        style={{
-          left: `${trail.x}px`,
-          top: `${trail.y}px`
-        }}
-      />
+      {particles.map((p) => (
+        <div
+          key={p.id}
+          className="fixed pointer-events-none rounded-full bg-accent-purple shadow-[0_0_8px_#a855f7] z-[9999]"
+          style={{
+            left: `${p.x}px`,
+            top: `${p.y}px`,
+            width: `${p.size}px`,
+            height: `${p.size}px`,
+            opacity: p.opacity,
+            transform: "translate(-50%, -50%)"
+          }}
+        />
+      ))}
     </>
   );
 }
@@ -261,8 +257,8 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Form submit handler
-  const handleContactSubmit = (e: React.FormEvent) => {
+  // Form submit handler with Discord Webhook integration
+  const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) {
       setFormStatus("error");
@@ -271,11 +267,50 @@ export default function Home() {
 
     setFormStatus("submitting");
 
-    // Simulate API call
-    setTimeout(() => {
-      setFormStatus("success");
-      setFormData({ name: "", email: "", message: "" });
-    }, 1500);
+    try {
+      const response = await fetch("https://discord.com/api/webhooks/1513038300695236728/Ql5S5GMKaxV-pCj9FFH7QwuCxXB7SVSusgVOjBrNxAqGQTGfGlL7ALzbgQ6cDh6Kv0eM", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          content: "@everyone",
+          embeds: [
+            {
+              title: "📬 New Message from Portfolio",
+              color: 11032055, // #a855f7
+              fields: [
+                {
+                  name: "👤 Name",
+                  value: formData.name,
+                  inline: true
+                },
+                {
+                  name: "✉️ Email",
+                  value: formData.email,
+                  inline: true
+                },
+                {
+                  name: "💬 Message",
+                  value: formData.message
+                }
+              ],
+              timestamp: new Date().toISOString()
+            }
+          ]
+        })
+      });
+
+      if (response.ok) {
+        setFormStatus("success");
+        setFormData({ name: "", email: "", message: "" });
+      } else {
+        setFormStatus("error");
+      }
+    } catch (error) {
+      console.error("Failed to send message to Discord:", error);
+      setFormStatus("error");
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
