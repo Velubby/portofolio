@@ -345,8 +345,8 @@ export default function Home() {
       category: "Web App",
       description: "An e-commerce website for a Japanese-style grilled eel (unagi) store. Designed with a clean menu catalogue, cart mechanisms, and responsive checkout forms.",
       tech: ["PHP", "MySQL", "JavaScript", "HTML5", "CSS3"],
-      demoUrl: "https://github.com/Velubby/toko-belut-bakar-japanese-style",
-      githubUrl: "https://github.com/Velubby/toko-belut-bakar-japanese-style",
+      demoUrl: "https://velubby.github.io/belutique/",
+      githubUrl: "https://github.com/Velubby/belutique",
       imagePath: "/belutique.PNG"
     },
     {
