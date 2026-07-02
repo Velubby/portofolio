@@ -220,8 +220,6 @@ function CustomCursor() {
   );
 }
 
-const BASE_PATH = process.env.NODE_ENV === "production" ? "/portofolio" : "";
-
 export default function Home() {
   // States
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -523,7 +521,7 @@ export default function Home() {
                 <span className="w-2.5 h-2.5 rounded-full bg-green-500/80" />
               </div>
               <Image
-                src={`${BASE_PATH}/me.jpeg`}
+                src="/me.jpeg"
                 alt="Achmad Ichwani Avatar Artwork"
                 width={500}
                 height={500}
@@ -672,7 +670,7 @@ export default function Home() {
                     {p.imagePath ? (
                       <div className="relative w-full aspect-video rounded-lg overflow-hidden border border-border-purple bg-bg-primary">
                         <Image
-                          src={`${BASE_PATH}${p.imagePath}`}
+                          src={p.imagePath}
                           alt={`${p.title} Screenshot`}
                           fill
                           className="object-cover hover:scale-102 transition-transform duration-500"
