@@ -3,8 +3,13 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Achmad Ichwani | Web & Mobile Developer",
-  description: "Portfolio of Achmad Ichwani, a 6th-semester Informatics Engineering student at Universitas Duta Bangsa Surakarta, specializing in Web and Mobile development.",
-  keywords: ["portfolio", "Achmad Ichwani", "Flutter Developer", "Web Developer", "Universitas Duta Bangsa", "Surakarta", "purple theme"],
+  description: "Portfolio of Achmad Ichwani, a 7th-semester Informatics Engineering student at Universitas Duta Bangsa Surakarta. Builds Flutter apps and responsive web tools.",
+  keywords: ["portfolio", "Achmad Ichwani", "Flutter Developer", "Web Developer", "Universitas Duta Bangsa", "Surakarta"],
+  openGraph: {
+    title: "Achmad Ichwani | Web & Mobile Developer",
+    description: "Flutter apps and responsive web tools by Achmad Ichwani — Universitas Duta Bangsa Surakarta.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -14,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="min-h-screen flex flex-col bg-bg-primary text-text-primary antialiased selection:bg-accent-purple/30 selection:text-text-secondary">
+      <body className="min-h-screen flex flex-col antialiased">
         {children}
       </body>
     </html>
