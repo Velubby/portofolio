@@ -14,7 +14,7 @@ export default function Stack() {
           {groups.map((group) => (
             <div
               key={group.term}
-              className="grid grid-cols-[96px_1fr] gap-4 border-t border-rule-soft py-4 sm:grid-cols-[160px_1fr]"
+              className="grid grid-cols-1 gap-1 border-t border-rule-soft py-4 sm:grid-cols-[160px_1fr] sm:gap-4"
             >
               <dt className="label">{group.term}</dt>
               <dd className="text-sm leading-relaxed">{group.items.join(' · ')}</dd>

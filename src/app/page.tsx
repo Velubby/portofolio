@@ -12,7 +12,7 @@ export default function Home() {
         Skip to work
       </a>
       <Header />
-      <main id="top">
+      <main id="top" className="flex-1">
         <Intro />
         <Work />
         <Stack />
