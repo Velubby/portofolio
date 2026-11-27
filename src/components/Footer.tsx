@@ -1,11 +1,16 @@
 export default function Footer() {
   return (
-    <footer className="border-t border-border/50 bg-bg-secondary py-8 text-center text-xs text-text-muted">
-      <div className="mx-auto max-w-5xl space-y-2 px-4">
-        <p>© {new Date().getFullYear()} Achmad Ichwani. All rights reserved.</p>
-        <p className="flex items-center justify-center gap-1.5 font-mono text-[10px] text-text-muted">
-          Built with Next.js &amp; Tailwind CSS. Minimalist.
-        </p>
+    <footer className="border-t border-rule">
+      <div className="wrap flex flex-wrap items-center justify-between gap-2 py-5">
+        <p className="label">© {new Date().getFullYear()} velubby</p>
+        <a
+          href="https://github.com/Velubby/portofolio"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="label link"
+        >
+          source <span aria-hidden="true">↗</span>
+        </a>
       </div>
     </footer>
   );
