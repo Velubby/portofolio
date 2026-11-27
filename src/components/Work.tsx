@@ -10,7 +10,14 @@ export default function Work() {
             <li key={project.id} className="work-row">
               <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
                 <h3 className="text-[15px] font-semibold tracking-[-0.01em]">
-                  {project.title}
+                  <a
+                    href={project.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:underline hover:underline-offset-4"
+                  >
+                    {project.title}
+                  </a>
                 </h3>
                 <div className="flex shrink-0 items-center gap-4">
                   {project.demoUrl && project.demoUrl !== project.githubUrl && (
