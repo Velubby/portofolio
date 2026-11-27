@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "velubby — Mobile & Web Developer",
-  description: "Flutter apps and web tools that work. Repositories, stack, and contact.",
+  title: "velubby — enthusiast",
+  description: "I build things and publish the source. Repositories, stack, and contact.",
   openGraph: {
-    title: "velubby — Mobile & Web Developer",
-    description: "Flutter apps and web tools that work.",
+    title: "velubby — enthusiast",
+    description: "I build things and publish the source.",
     type: "website",
   },
 };
