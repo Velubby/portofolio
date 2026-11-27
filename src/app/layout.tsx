@@ -2,9 +2,13 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Achmad Ichwani | Web & Mobile Developer",
-  description: "Portfolio of Achmad Ichwani, a 6th-semester Informatics Engineering student at Universitas Duta Bangsa Surakarta, specializing in Web and Mobile development.",
-  keywords: ["portfolio", "Achmad Ichwani", "Flutter Developer", "Web Developer", "Universitas Duta Bangsa", "Surakarta", "purple theme"],
+  title: "velubby — enthusiast",
+  description: "I build things and publish the source. Repositories, stack, and contact.",
+  openGraph: {
+    title: "velubby — enthusiast",
+    description: "I build things and publish the source.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -14,9 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="min-h-screen flex flex-col bg-bg-primary text-text-primary antialiased selection:bg-accent-purple/30 selection:text-text-secondary">
-        {children}
-      </body>
+      <body className="min-h-screen bg-canvas text-ink antialiased">{children}</body>
     </html>
   );
 }
