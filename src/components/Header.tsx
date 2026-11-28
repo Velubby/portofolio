@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import ScrollProgress from '@/components/ScrollProgress';
+import CommandTrigger from '@/components/CommandTrigger';
 
 const links = [
   { id: 'work', label: 'work' },
@@ -13,18 +15,20 @@ export default function Header() {
         <Link href="/#top" className="label font-medium text-ink">
           velubby
         </Link>
-        <nav aria-label="Primary" className="flex items-center gap-5">
+        <nav aria-label="Primary" className="flex items-center gap-4 sm:gap-5">
           {links.map((link) => (
             <a
               key={link.id}
               href={`/#${link.id}`}
-              className="label hover:text-ink hover:underline hover:underline-offset-4"
+              className="label underline-draw hover:text-ink"
             >
               {link.label}
             </a>
           ))}
+          <CommandTrigger />
         </nav>
       </div>
+      <ScrollProgress />
     </header>
   );
 }

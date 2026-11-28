@@ -3,10 +3,10 @@
 @theme {
   --color-canvas: #fafafa;
   --color-ink: #111111;
+  --color-ink-soft: #333333;
   --color-muted: #666666;
   --color-rule: #d4d4d4;
   --color-rule-soft: #e6e6e6;
-  --color-row-hover: #f0f0f0;
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
 }
@@ -20,6 +20,12 @@
     background-color: var(--color-canvas);
     color: var(--color-ink);
     -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
   }
 
   body {
@@ -104,12 +110,44 @@
     border-top: 1px solid var(--color-rule-soft);
   }
 
-  .work-row:first-child {
-    border-top: 0;
+  .underline-draw {
+    position: relative;
   }
 
-  .work-row:hover {
-    background-color: var(--color-row-hover);
+  .underline-draw::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: -3px;
+    left: 0;
+    height: 1px;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+
+  .underline-draw:hover::after,
+  .underline-draw:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .underline-draw::after {
+      transition: transform 180ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+  }
+
+  .status-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 9999px;
+    background-color: var(--color-ink);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .status-dot {
+      animation: status-pulse 3s ease-in-out infinite;
+    }
   }
 
   .skip {
@@ -128,5 +166,252 @@
 
   .skip:focus {
     top: 8px;
+  }
+
+  .signal-track-v {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background-color: rgba(17, 17, 17, 0.035);
+  }
+
+  .signal-pulse-v {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 112px;
+    will-change: transform;
+  }
+
+  .signal-pulse-v-down {
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(17, 17, 17, 0.16) 75%,
+      rgba(17, 17, 17, 0.24) 100%
+    );
+    animation: signal-down 15s linear infinite;
+  }
+
+  .signal-pulse-v-up {
+    background: linear-gradient(
+      to top,
+      transparent 0%,
+      rgba(17, 17, 17, 0.16) 75%,
+      rgba(17, 17, 17, 0.24) 100%
+    );
+    animation: signal-up 15s linear infinite;
+  }
+
+  .signal-horizontal-mask {
+    position: absolute;
+    inset: 0;
+    mask-image: linear-gradient(
+      to right,
+      black 0%,
+      black calc(50% - 372px),
+      transparent calc(50% - 332px),
+      transparent calc(50% + 332px),
+      black calc(50% + 372px),
+      black 100%
+    );
+  }
+
+  .signal-track-h {
+    position: absolute;
+    right: 0;
+    left: 0;
+    height: 1px;
+    background-color: rgba(17, 17, 17, 0.035);
+  }
+
+  .signal-pulse-h {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 128px;
+    height: 1px;
+    will-change: transform;
+  }
+
+  .signal-pulse-h-right {
+    background: linear-gradient(
+      to right,
+      transparent 0%,
+      rgba(17, 17, 17, 0.16) 75%,
+      rgba(17, 17, 17, 0.24) 100%
+    );
+    animation: signal-right 19s linear infinite;
+  }
+
+  .signal-pulse-h-left {
+    background: linear-gradient(
+      to left,
+      transparent 0%,
+      rgba(17, 17, 17, 0.16) 75%,
+      rgba(17, 17, 17, 0.24) 100%
+    );
+    animation: signal-left 19s linear infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .signal-pulse-v,
+    .signal-pulse-h {
+      animation: none;
+      opacity: 0;
+    }
+  }
+
+  .reveal-pending {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal-pending.revealed {
+      opacity: 1;
+      transform: translateY(0);
+      transition:
+        opacity 600ms cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms),
+        transform 600ms cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal-pending {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .count-live {
+    display: none;
+  }
+
+  .count-up.counting-enabled .count-live {
+    display: inline;
+  }
+
+  .count-up.counting-enabled .count-static {
+    display: none;
+  }
+
+  .palette-backdrop {
+    transition: opacity 150ms ease-out;
+  }
+
+  .palette-panel {
+    transition:
+      opacity 180ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, opacity;
+  }
+
+  .palette-indicator {
+    transition:
+      transform 140ms cubic-bezier(0.2, 0.9, 0.3, 1),
+      height 140ms ease-out,
+      opacity 120ms ease-out;
+    will-change: transform;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .palette-backdrop,
+    .palette-panel,
+    .palette-indicator {
+      transition: none;
+    }
+  }
+}
+
+@keyframes status-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.3;
+  }
+}
+
+@keyframes signal-down {
+  from {
+    transform: translate3d(0, -140px, 0);
+  }
+
+  to {
+    transform: translate3d(0, 100vh, 0);
+  }
+}
+
+@keyframes signal-up {
+  from {
+    transform: translate3d(0, 100vh, 0);
+  }
+
+  to {
+    transform: translate3d(0, -140px, 0);
+  }
+}
+
+@keyframes signal-right {
+  from {
+    transform: translate3d(-160px, 0, 0);
+  }
+
+  to {
+    transform: translate3d(100vw, 0, 0);
+  }
+}
+
+@keyframes signal-left {
+  from {
+    transform: translate3d(100vw, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-160px, 0, 0);
+  }
+}
+
+header {
+  view-transition-name: site-header;
+}
+
+::view-transition-old(site-header),
+::view-transition-new(site-header),
+::view-transition-group(site-header) {
+  animation: none;
+}
+
+::view-transition-old(root) {
+  animation: 220ms cubic-bezier(0.16, 1, 0.3, 1) both section-exit;
+}
+
+::view-transition-new(root) {
+  animation: 300ms cubic-bezier(0.16, 1, 0.3, 1) both section-enter;
+}
+
+@keyframes section-exit {
+  to {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes section-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
   }
 }

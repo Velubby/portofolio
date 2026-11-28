@@ -1,5 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import AmbientSignals from "@/components/AmbientSignals";
+import CommandPalette from "@/components/CommandPalette";
+import ViewTransitions from "@/components/ViewTransitions";
 
 const siteUrl = "https://portofolio-velubbys-projects.vercel.app";
 
@@ -40,7 +43,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="flex min-h-screen flex-col bg-canvas text-ink antialiased">{children}</body>
+      <body className="flex min-h-screen flex-col bg-canvas text-ink antialiased">
+        <noscript>
+          <style>{`
+            .reveal-pending { opacity: 1 !important; transform: none !important; }
+          `}</style>
+        </noscript>
+        <AmbientSignals />
+        <ViewTransitions />
+        <div className="relative z-10 flex flex-1 flex-col">{children}</div>
+        <CommandPalette />
+      </body>
     </html>
   );
 }
